@@ -21,7 +21,6 @@ export function RenderEmptyState({ isDragActive }: { isDragActive: boolean }) {
         </span>{" "}
       </p>
       <Button type="button" className="mt-4">
-        {" "}
         Joindre un fichier
       </Button>
     </div>
@@ -38,12 +37,9 @@ export function RenderErrorState() {
       <p className="text-xs mt-1 text-muted-foreground">
         Quelques chose s'est mal passé
       </p>
-      <Button className="mt-4" type="submit">
+      <Button className="mt-4" type="button">
         Réessayez la selection
       </Button>
-      {/* <p className="text-xl mt-3 text-muted-foreground">
-        Cliquez ou faites glisser pour réessayer
-      </p> */}
     </div>
   );
 }
@@ -55,10 +51,10 @@ export function RenderUploadState({
 }: {
   previewUrl: string;
   isDeleting: boolean;
-  handleRemoveFile:()=>void
+  handleRemoveFile: () => void;
 }) {
   return (
-    <div className="">
+    <div className="relative w-full h-full">
       <Image
         src={previewUrl}
         alt="Upload File"
@@ -72,34 +68,18 @@ export function RenderUploadState({
         onClick={handleRemoveFile}
         disabled={isDeleting}
       >
-        {isDeleting ? (
-          <Loader2 className="size-4 animate-spin" />
-        ) : (
-          <XIcon className="size-4" />
-        )}
+        {isDeleting ? <Loader2 className="size-4 animate-spin" /> : <XIcon className="size-4" />}
       </Button>
     </div>
   );
 }
 
-export function RenderUploadingState({
-  progress,
-  file,
-}: {
-  progress: number;
-  file: File;
-}) {
+export function RenderUploadingState({ progress, file }: { progress: number; file: File }) {
   return (
     <div className="text-center flex justify-center items-center flex-col">
-      <p>{progress} </p>
-      <p className="mt-2 text-sm font-medium text-foreground">
-        Téléchargement...
-      </p>
-
-      <p className="mt-1 text-xs text-muted-foreground truncate max-w-xs">
-        {" "}
-        {file.name}{" "}
-      </p>
+      <p>{progress}%</p>
+      <p className="mt-2 text-sm font-medium text-foreground">Téléchargement...</p>
+      <p className="mt-1 text-xs text-muted-foreground truncate max-w-xs">{file.name}</p>
     </div>
   );
 }

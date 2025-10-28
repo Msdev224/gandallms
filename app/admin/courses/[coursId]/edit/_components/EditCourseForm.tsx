@@ -1,5 +1,5 @@
 "use client";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   courseCategories,
   CourseLevel,
@@ -7,8 +7,8 @@ import {
   coursesSchema,
   CourseStatus,
 } from "@/lib/zodSchemas";
-import {Loader2, RefreshCcw, SparkleIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Loader2, RefreshCcw, SparkleIcon } from "lucide-react";
+import { useForm, Control } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -36,10 +36,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { editCourse } from "../actions";
 import { AdminCourseSingularType } from "@/app/data/admin/admin-get-course";
+
 interface iApprops {
   data: AdminCourseSingularType;
 }
-export  function EditCourse({ data }: iApprops) {
+
+export function EditCourse({ data }: iApprops) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -52,7 +54,7 @@ export  function EditCourse({ data }: iApprops) {
       price: data.price,
       duration: data.duration,
       level: data.level,
-      category: data.category as CourseSchemaType['category'],
+      category: data.category as CourseSchemaType["category"],
       status: data.status,
       slug: data.slug,
       smallDescription: data.smallDescription,
@@ -60,7 +62,9 @@ export  function EditCourse({ data }: iApprops) {
   });
   function onSubmit(values: CourseSchemaType) {
     startTransition(async () => {
-      const { data: result, error } = await tryCatch(editCourse(values, data.id));
+      const { data: result, error } = await tryCatch(
+        editCourse(values, data.id)
+      );
       if (error) {
         toast.error(
           "Une erreur inattendue s'est produite. Veuillez réessayer."

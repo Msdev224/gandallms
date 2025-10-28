@@ -28,6 +28,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
+  Edit2,
   FileText,
   GripVertical,
   MinusCircleIcon,
@@ -38,6 +39,11 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "sonner";
 import { reorderChapter, reorderLessons } from "../actions";
+import NewChapterModal from "./NewChapterModal";
+import NewLessonModal from "./NewLessonModal";
+import { DeleteLessons } from "./DeleteLessons";
+import { DeleteChapter } from "./DeleteChapter";
+
 
 interface iAppProps {
   data: AdminCourseSingularType;
@@ -295,6 +301,7 @@ export function CourseStructure({ data }: iAppProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between border-b border-border">
           <CardTitle>Chapitre</CardTitle>
+          <NewChapterModal courseId={data.id} />
         </CardHeader>
         <CardContent>
           <SortableContext items={items} strategy={verticalListSortingStrategy}>
@@ -339,13 +346,13 @@ export function CourseStructure({ data }: iAppProps) {
                             SECTION - {item.order} : {item.title}
                           </p>
                         </div>
-                        <Button
-                          size="icon"
-                          variant="outline"
-                          className="text-red-500 cursor-pointer"
-                        >
-                          <Trash2Icon />
-                        </Button>
+
+                        
+                          <DeleteChapter
+                            chapterId={item.id}
+                            courseId={data.id}
+                          />
+                        
                       </div>
                       <CollapsibleContent>
                         <div className="p-1">
@@ -374,26 +381,25 @@ export function CourseStructure({ data }: iAppProps) {
                                       <Link
                                         href={`/admin/courses/${data.id}/${item.id}/${lesson.id}`}
                                       >
-                                        {" "}
-                                        {lesson.title}{" "}
+                                        {lesson.order} - {lesson.title}
                                       </Link>
                                     </div>
-                                    <Button
-                                      variant="ghost"
-                                      size="icon"
-                                      className="cursor-pointer"
-                                    >
-                                      <Trash2Icon className="text-red-400" />
-                                    </Button>
+
+                                    <DeleteLessons
+                                      chapterId={item.id}
+                                      courseId={data.id}
+                                      lessonId={lesson.id}
+                                    />
                                   </div>
                                 )}
                               </SortableItem>
                             ))}
                           </SortableContext>
                           <div className="p-6">
-                            <Button variant="outline" className="w-full">
-                              Ajouter une leçon
-                            </Button>
+                            <NewLessonModal
+                              courseId={data.id}
+                              chapterId={item.id}
+                            />
                           </div>
                         </div>
                       </CollapsibleContent>
@@ -403,6 +409,7 @@ export function CourseStructure({ data }: iAppProps) {
               </SortableItem>
             ))}
           </SortableContext>
+          <NewChapterModal courseId={data.id} />
         </CardContent>
       </Card>
     </DndContext>
