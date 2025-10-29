@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { authClient } from "@/lib/auth-client";
 
 import Link from "next/link";
 
@@ -41,6 +42,8 @@ const features: featureProps[] = [
   },
 ];
 export default function Home() {
+
+  const session = authClient.useSession();
  
   return (
     <>
@@ -64,7 +67,7 @@ export default function Home() {
             >
               Explorer les cours
             </Link>
-
+             { !session && 
             <Link
               href="/login"
               className={buttonVariants({
@@ -73,7 +76,7 @@ export default function Home() {
               })}
             >
               Se connecter
-            </Link>
+            </Link>}
           </div>
         </div>
       </section>
