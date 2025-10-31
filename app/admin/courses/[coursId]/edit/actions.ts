@@ -7,15 +7,10 @@ import { ApiResponse } from "@/lib/types";
 import { chapterSchema, chapterSchemaType, CourseSchemaType, coursesSchema, lessonSchema, lessonSchemaType } from "@/lib/zodSchemas";
 
 
-import { detectBot, fixedWindow, request } from "@arcjet/next";
+import { fixedWindow, request } from "@arcjet/next";
 import { revalidatePath } from "next/cache";
 
 const aj = arcjetInstance.withRule(
-    detectBot({
-        mode: 'LIVE',
-        allow: [],
-    })
-).withRule(
     fixedWindow({
         mode: 'LIVE',
         window: "1m",
@@ -28,7 +23,7 @@ export async function editCourse(data: CourseSchemaType, coursId: string): Promi
 
     try {
         const req = await request()
-        const decision = await arcjetInstance.protect(req, {
+        const decision = await aj.protect(req, {
             fingerprint: user.user.id
         })
 
@@ -217,7 +212,7 @@ export async function addLesson(values: lessonSchemaType): Promise<ApiResponse> 
         if (!result.success) {
             return {
                 status: "error",
-                message: "Données Invalid",
+                message: "Données Invalid", 
             };
         }
 

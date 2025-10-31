@@ -5,14 +5,9 @@ import { arcjetInstance } from "@/lib/arcjet";
 import prisma from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchemaType, coursesSchema } from "@/lib/zodSchemas";
-import { detectBot, fixedWindow, request } from "@arcjet/next";
+import { fixedWindow, request } from "@arcjet/next";
 
 const aj = arcjetInstance.withRule(
-    detectBot({
-        mode: 'LIVE',
-        allow: [],
-    })
-).withRule(
     fixedWindow({
         mode: 'LIVE',
         window: "1m",
@@ -25,7 +20,7 @@ export async function CreateCourse(values: CourseSchemaType): Promise<ApiRespons
     const session = await requireAdmin();
     try {
         const req = await request()
-        const decision = await arcjetInstance.protect(req, {
+        const decision = await aj.protect(req, {
             fingerprint: session.user.id
         })
 

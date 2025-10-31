@@ -1,18 +1,12 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
-import { arcjetInstance, detectBot, fixedWindow } from "@/lib/arcjet";
-import { auth } from "@/lib/auth";
+import { arcjetInstance, fixedWindow } from "@/lib/arcjet";
+
 import { env } from "@/lib/env";
 import { S3 } from "@/lib/S3Client";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 const aj = arcjetInstance.withRule(
-    detectBot({
-        mode: 'LIVE',
-        allow: [],
-    })
-).withRule(
     fixedWindow({
         mode: 'LIVE',
         window: "1m",

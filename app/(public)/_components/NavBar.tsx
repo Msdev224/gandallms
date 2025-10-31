@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "@/public/logo.png";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/sidebar/themeToggle";
 import { authClient } from "@/lib/auth-client";
 import { buttonVariants } from "@/components/ui/button";

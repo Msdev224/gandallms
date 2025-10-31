@@ -73,7 +73,7 @@ const AdminCourseCard = ({ data }: {data: iAppProps}) => {
         </DropdownMenu>
       </div>
       <Image
-        src={thumbnailUrl}
+        src={thumbnailUrl || ""}
         alt="url image minuature"
         width={600} // ← largeur en px
         height={400}

@@ -1,7 +1,6 @@
 import { getIndividualCourse } from "@/app/data/course/get-course";
 import { RenderDescription } from "@/components/rich-text-editor/RenderDescription";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
@@ -21,12 +20,18 @@ import {
 } from "@tabler/icons-react";
 import { CheckIcon } from "lucide-react";
 import Image from "next/image";
+import { CheckCourseBought } from "@/app/data/user/user-is-enrolled";
+import Link from "next/link";
+import { EnrollementButton } from "./_components/EnrollementButton";
+import { buttonVariants } from "@/components/ui/button";
 type Params = Promise<{ slug: string }>;
 
 export default async function SlugPage({ params }: { params: Params }) {
   const { slug } = await params;
   const course = await getIndividualCourse(slug);
   const thumbnailUrl = useConstructUrl(course.fileKey);
+
+  const isEnrolled = await CheckCourseBought(course.id);
 
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 mt-5">
@@ -173,7 +178,7 @@ export default async function SlugPage({ params }: { params: Params }) {
                   }).format(course.price)}
                 </span>
               </div>
-              <div className="mb-6 space-y-3 rounded-lg bg-muted p-4">
+              <div className="mb-6 space-y-4 rounded-lg bg-muted p-4 mt-4">
                 <h4 className="font-medium">Ce que vous obtiendrez:</h4>
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-3">
@@ -238,7 +243,7 @@ export default async function SlugPage({ params }: { params: Params }) {
                 </div>
               </div>
 
-              <div className="mb-6 space-y-3">
+              <div className="mb-6 space-y-4">
                 <h4>Ce cours comprend : </h4>
                 <ul className="space-y-2">
                   <li className="flex items-center gap-2 text-sm">
@@ -262,8 +267,14 @@ export default async function SlugPage({ params }: { params: Params }) {
                 </ul>
               </div>
 
-              <Button className="w-full cursor-pointer">Inscrivez-vous maintenant</Button>
-              <p className="mt-3 text-center text-xs text-muted-foreground">Garantie de remboursement de 15 jours</p>
+              {isEnrolled ? (
+                <Link className={buttonVariants({className:"w-full"})} href="/dashboard">Regarder le cours</Link>
+              ) : (
+               <EnrollementButton courseId={course.id}/>
+              )}
+              <p className="mt-3 text-center text-xs text-muted-foreground">
+                Garantie de remboursement de 15 jours
+              </p>
             </CardContent>
           </Card>
         </div>
