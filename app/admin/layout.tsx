@@ -1,16 +1,24 @@
-// "use client";
-
 // import { AppSidebar } from "@/components/sidebar/app-sidebar";
 // import { SiteHeader } from "@/components/sidebar/site-header";
 // import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 // import { useEffect, useState } from "react";
+// import { requireAdmin } from "../data/admin/require-admin";
 
-// export default function AdminLayout({ children }: { children: React.ReactNode }) {
-//   const[hasMounted, setHasMounted] = useState(false);
+// export default async function AdminLayout({
+//   children,
+// }: {
+//   children: React.ReactNode;
+// }) {
+//   await requireAdmin()
+//   const [hasMounted, setHasMounted] = useState(false);
 
-//   useEffect(() => setHasMounted(true), []);
+//   useEffect(() => {
+//     setHasMounted(true);
+//   }, []);
 
+//   // Ne rien rendre côté serveur pour éviter les erreurs d'hydratation
 //   if (!hasMounted) return null;
+
 //   return (
 //     <SidebarProvider
 //       style={
@@ -41,22 +49,12 @@
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { useEffect, useState } from "react";
 
-export default function AdminLayout({
+export default function AdminLayoutClient({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  // Ne rien rendre côté serveur pour éviter les erreurs d'hydratation
-  if (!hasMounted) return null;
-
   return (
     <SidebarProvider
       style={

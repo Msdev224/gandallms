@@ -26,13 +26,13 @@ interface UploaderState {
   fileType: "image" | "video";
 }
 
-interface iAppProps{
-  value?: string,
-  onChange?: (Value: string)=>void;
+interface iAppProps {
+  value?: string;
+  onChange?: (Value: string) => void;
 }
 
-export function Uploader({onChange, value}:iAppProps) {
-  const fileUrl = useConstructUrl(value || "")
+export function Uploader({ onChange, value }: iAppProps) {
+  const fileUrl = useConstructUrl(value || "");
   const [fileState, setFileState] = useState<UploaderState>({
     error: false,
     file: null,
@@ -42,8 +42,7 @@ export function Uploader({onChange, value}:iAppProps) {
     isDeleting: false,
     fileType: "image",
     key: value,
-    objectUrl: fileUrl
-
+    objectUrl: fileUrl,
   });
 
   async function uploadFile(file: File) {
@@ -103,7 +102,7 @@ export function Uploader({onChange, value}:iAppProps) {
             }));
 
             onChange?.(key);
-            
+
             toast.success("Fichier télécharger avec succès");
 
             resolve();
@@ -121,6 +120,7 @@ export function Uploader({onChange, value}:iAppProps) {
         xhr.send(file);
       });
     } catch (error) {
+      console.log(error);
       toast.error("Quelques choses s'est mal passé");
       setFileState((prev) => ({
         ...prev,
@@ -140,13 +140,13 @@ export function Uploader({onChange, value}:iAppProps) {
       }));
       const response = await fetch("/api/s3/delete", {
         method: "DELETE",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           key: fileState.key,
-        })
-      })
-      if(!response.ok){
-        toast.error("Echec lors de la suppression")
+        }),
+      });
+      if (!response.ok) {
+        toast.error("Echec lors de la suppression");
         setFileState((prev) => ({
           ...prev,
           isDeleting: true,
@@ -160,23 +160,21 @@ export function Uploader({onChange, value}:iAppProps) {
       }
 
       onChange?.("");
-      
-      
+
       setFileState(() => ({
         file: null,
         uploading: false,
         progress: 0,
         objectUrl: undefined,
-        fileType: 'image',
+        fileType: "image",
         error: false,
-        id:null,
+        id: null,
         isDeleting: false,
       }));
-      toast.success('Fichier supprimé avec succès')
-
+      toast.success("Fichier supprimé avec succès");
     } catch (error) {
-      toast.error("Echéc de suppression du fichier veuillez réessayez")
-      
+      toast.error("Echéc de suppression du fichier veuillez réessayez");
+
       setFileState((prev) => ({
         ...prev,
         isDeleting: false,
@@ -272,7 +270,7 @@ export function Uploader({onChange, value}:iAppProps) {
     multiple: false,
     maxSize: 5 * 1024 * 1024, // 5MB
     onDropRejected: rejectedFiles,
-    disabled: fileState.uploading || !!fileState.objectUrl
+    disabled: fileState.uploading || !!fileState.objectUrl,
   });
   return (
     <Card

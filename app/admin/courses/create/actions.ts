@@ -3,6 +3,7 @@
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import { arcjetInstance } from "@/lib/arcjet";
 import prisma from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { ApiResponse } from "@/lib/types";
 import { CourseSchemaType, coursesSchema } from "@/lib/zodSchemas";
 import { fixedWindow, request } from "@arcjet/next";
@@ -55,10 +56,20 @@ export async function CreateCourse(values: CourseSchemaType): Promise<ApiRespons
             }
         }
 
-        const data = await prisma.courses.create({
+        const data = await stripe.products.create({
+            name: validation.data.title,
+            description: validation.data.smallDescription,
+            default_price_data: {
+                currency: 'GNF',
+                unit_amount: validation.data.price
+            }
+        })
+
+        await prisma.courses.create({
             data: {
                 ...validation.data,
-                userId: session?.user.id as string
+                userId: session?.user.id as string,
+                stripePriceId: data.default_price as string
             }
 
         })

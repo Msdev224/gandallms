@@ -3,8 +3,10 @@ import { buttonVariants } from '@/components/ui/button'
 import { PlusCircleIcon } from 'lucide-react'
 import Link from 'next/link'
 import AdminCourseCard from './_components/AdminCourseCard'
+import { requireAdmin } from '@/app/data/admin/require-admin'
 
 const CoursesPage = async () => {
+
   const data = await adminGetCourses()
   return (
     <>

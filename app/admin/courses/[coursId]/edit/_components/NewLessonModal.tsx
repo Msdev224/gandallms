@@ -107,7 +107,11 @@ export default function NewLessonModal({
             />
 
             <DialogFooter>
-              <Button disabled={pending} type="submit">
+              <Button
+                disabled={pending}
+                type="submit"
+                className="cursor-pointer"
+              >
                 {pending ? "Ajout en cours..." : "Ajouter"}
               </Button>
             </DialogFooter>

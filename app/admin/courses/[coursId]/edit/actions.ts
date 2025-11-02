@@ -156,6 +156,8 @@ export async function reorderChapter(courseId: string, chapters: { id: string, p
 
 export async function addChapter(values: chapterSchemaType): Promise<ApiResponse> {
     await requireAdmin()
+    const user = await requireAdmin()
+    console.log(user)
     try {
         const result = chapterSchema.safeParse(values);
 
@@ -205,7 +207,8 @@ export async function addChapter(values: chapterSchemaType): Promise<ApiResponse
 
 
 export async function addLesson(values: lessonSchemaType): Promise<ApiResponse> {
-    await requireAdmin()
+   await requireAdmin()
+    
     try {
         const result = lessonSchema.safeParse(values);
 
@@ -249,6 +252,7 @@ export async function addLesson(values: lessonSchemaType): Promise<ApiResponse> 
         }
 
     } catch (error) {
+        console.log(error)
         return {
             status: "error",
             message: "Échec de creation du leçon"
